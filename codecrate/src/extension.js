@@ -34,17 +34,21 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
-exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
 const clerkAuth_1 = require("./auth/clerkAuth");
 const loadSnippets_1 = require("./snippets/loadSnippets");
+const saveSnippets_1 = require("./snippets/saveSnippets");
 async function activate(context) {
     const token = await (0, clerkAuth_1.getToken)(context);
     if (!token) {
         vscode.window.showWarningMessage("Authentication required to use the extension.");
         return;
     }
-    (0, loadSnippets_1.loadSnippets)(context, token);
+    const triggerLoadSnippet = () => {
+        (0, loadSnippets_1.loadSnippets)(context, token);
+    };
+    triggerLoadSnippet();
+    const disposable = (0, saveSnippets_1.saveSnippets)(token, triggerLoadSnippet);
+    context.subscriptions.push(disposable);
 }
-function deactivate() { }
 //# sourceMappingURL=extension.js.map

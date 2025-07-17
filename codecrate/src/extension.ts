@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getToken } from "./auth/clerkAuth";
 import { loadSnippets } from "./snippets/loadSnippets";
+import { saveSnippets } from "./snippets/saveSnippets";
 
 export async function activate(context: vscode.ExtensionContext) {
   const token = await getToken(context);
@@ -10,7 +11,10 @@ export async function activate(context: vscode.ExtensionContext) {
     );
     return;
   }
-  loadSnippets(context, token);
+  const triggerLoadSnippet = () => {
+    loadSnippets(context, token);
+  };
+  triggerLoadSnippet();
+  const disposable = saveSnippets(token, triggerLoadSnippet);
+  context.subscriptions.push(disposable);
 }
-
-export function deactivate() {}

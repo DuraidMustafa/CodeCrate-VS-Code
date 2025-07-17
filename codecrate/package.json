@@ -16,8 +16,15 @@
   "contributes": {
     "commands": [
       {
-        "command": "codecrate.helloWorld",
-        "title": "Hello World"
+        "command": "extension.saveSnippet",
+        "title": "Save Code Snippet"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.saveSnippet",
+        "key": "alt+shift+s",
+        "when": "editorTextFocus"
       }
     ]
   },
