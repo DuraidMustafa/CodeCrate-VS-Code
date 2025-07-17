@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
+import { getToken } from "../auth/clerkAuth";
 export async function loadSnippets(
   context: vscode.ExtensionContext,
   token: string,
 ) {
   const response = await fetch(
-    "http://localhost:3000/api/vscode/snippets/getAllSnippets",
+    "https://projects.codecrate.duraidmustafa.com/api/vscode/snippets/getAllSnippets",
     {
       headers: {
         "Content-Type": "application/json",
@@ -12,7 +13,16 @@ export async function loadSnippets(
       },
     },
   );
-  const data = (await response.json()) as { snippets: Array<any> };
+  const data: any = (await response.json()) as { snippets: Array<any> };
+  if (!data.success && data.message == "Unauthorized") {
+    const token = await getToken(context);
+    if (!token) {
+      vscode.window.showWarningMessage(
+        "Authentication required to use the extension.",
+      );
+      return;
+    }
+  }
 
   const snippets = data.snippets;
 

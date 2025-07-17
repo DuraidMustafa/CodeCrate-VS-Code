@@ -70,7 +70,7 @@ const saveSnippets = (token, triggerLoadSnippet) => {
     });
     return disposable;
     async function saveSnippetToAPI(payload) {
-        const response = await fetch("http://localhost:3000/api/vscode/snippets/saveSnippet", {
+        const response = await fetch("https://projects.codecrate.duraidmustafa.com/api/vscode/snippets/saveSnippet", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

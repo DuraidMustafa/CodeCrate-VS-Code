@@ -42,7 +42,7 @@ async function getToken(context) {
     }
     const choice = await vscode.window.showInformationMessage("You're not signed in. Please sign in to continue", "Sign in");
     if (choice === "Sign in") {
-        vscode.env.openExternal(vscode.Uri.parse("http://localhost:3000/account/token"));
+        vscode.env.openExternal(vscode.Uri.parse("https://projects.codecrate.duraidmustafa.com/account/token"));
     }
     const token = await vscode.window.showInputBox({
         prompt: "Paste your Clerk token from the website",

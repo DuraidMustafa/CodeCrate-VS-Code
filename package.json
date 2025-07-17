@@ -1,23 +1,33 @@
 {
   "name": "codecrate",
   "displayName": "CodeCrate",
+  "publisher": "DuraidMustafa",
   "description": "Personal code snippet manager for solo developers. Save, search, and organize your code snippets with tags, and instant recall.",
-  "version": "0.0.1",
+  "version": "1.0.5",
   "engines": {
     "vscode": "^1.102.0"
   },
+  "icon": "CodeCrate.png",
   "categories": [
     "Other"
   ],
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./src/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DuraidMustafa/CodeCrate-VS-Code"
+  },
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "extension.saveSnippet",
         "title": "Save Code Snippet"
+      },
+      {
+        "command": "extension.viewSnippets",
+        "title": "View My Snippets"
       }
     ],
     "keybindings": [
@@ -25,6 +35,10 @@
         "command": "extension.saveSnippet",
         "key": "alt+shift+s",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "extension.viewSnippets",
+        "key": "alt+shift+n"
       }
     ]
   },
@@ -47,6 +61,7 @@
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.6",
     "eslint": "^9.25.1",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
@@ -54,6 +69,7 @@
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
+    "@vscode/vsce": "^3.6.0",
     "dotenv": "^17.2.0"
   }
 }

@@ -33,22 +33,29 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activate = activate;
+exports.loadSnippets = loadSnippets;
 const vscode = __importStar(require("vscode"));
-const clerkAuth_1 = require("./auth/clerkAuth");
-const loadSnippets_1 = require("./snippets/loadSnippets");
-const saveSnippets_1 = require("./snippets/saveSnippets");
-async function activate(context) {
-    const token = await (0, clerkAuth_1.getToken)(context);
-    if (!token) {
-        vscode.window.showWarningMessage("Authentication required to use the extension.");
-        return;
+async function loadSnippets(context, token) {
+    const response = await fetch("https://projects.codecrate.duraidmustafa.com/api/vscode/snippets/getAllSnippets", {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = (await response.json());
+    const snippets = data.snippets;
+    for (const snippet of snippets) {
+        const provider = vscode.languages.registerCompletionItemProvider({ scheme: "file" }, {
+            provideCompletionItems(document, position) {
+                const item = new vscode.CompletionItem(snippet.shortcut, vscode.CompletionItemKind.Snippet);
+                item.insertText = new vscode.SnippetString(snippet.code);
+                item.documentation = new vscode.MarkdownString(snippet.description);
+                item.filterText = snippet.shortcut;
+                item.sortText = "0" + snippet.shortcut;
+                return [item];
+            },
+        }, ...[...new Set(snippet.shortcut)].map((ch) => ch[0]));
+        context.subscriptions.push(provider);
     }
-    const triggerLoadSnippet = () => {
-        (0, loadSnippets_1.loadSnippets)(context, token);
-    };
-    triggerLoadSnippet();
-    const disposable = (0, saveSnippets_1.saveSnippets)(token, triggerLoadSnippet);
-    context.subscriptions.push(disposable);
 }
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=loadSnippets.js.map

@@ -3,8 +3,7 @@ import * as vscode from "vscode";
 export async function getToken(
   context: vscode.ExtensionContext,
 ): Promise<string | null> {
-  const stored = await context.secrets.get("token");
-
+  const stored = context.globalState.get<string>("clerkToken");
   if (stored) {
     return stored;
   }
@@ -13,10 +12,13 @@ export async function getToken(
     "You're not signed in. Please sign in to continue",
     "Sign in",
   );
+  
 
   if (choice === "Sign in") {
     vscode.env.openExternal(
-      vscode.Uri.parse("http://localhost:3000/account/token"),
+      vscode.Uri.parse(
+        "https://projects.codecrate.duraidmustafa.com/account/token",
+      ),
     );
   }
 
@@ -27,8 +29,12 @@ export async function getToken(
   });
 
   if (token) {
-    await context.secrets.store("clerkToken", token);
+    console.log(token);
+
+    await context.globalState.update("clerkToken", token);
     vscode.window.showInformationMessage("Signed in successfully!");
+    const stored = context.globalState.get<string>("clerkToken");
+    console.log(stored);
     return token;
   }
 
