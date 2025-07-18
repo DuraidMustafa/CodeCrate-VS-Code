@@ -3,7 +3,7 @@
   "displayName": "CodeCrate",
   "publisher": "DuraidMustafa",
   "description": "Personal code snippet manager for solo developers. Save, search, and organize your code snippets with tags, and instant recall.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "engines": {
     "vscode": "^1.102.0"
   },
